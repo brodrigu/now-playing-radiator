@@ -39,6 +39,7 @@ LastfmAPI.prototype = {
     {
         this.get('user.recenttracks', {user: user}, function(response) {
             var track = response.recenttracks.track[0];
+            console.log(response);
             
             if (track && track['@attr'] && track['@attr'].nowplaying) {
                 success(track);

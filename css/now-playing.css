@@ -28,7 +28,7 @@ header a, footer a {
 
 /** Artist + Track */
 
-#artist,#track {
+#artist,#track,#user {
     display: inline-block;
     margin: .25em 0;
     padding: .2em .4em;
@@ -40,6 +40,11 @@ header a, footer a {
 #track {
     background: DarkOrange;
     box-shadow: 0 0 10px DarkOrange;
+}
+
+#user {
+    background: chartreuse;
+    box-shadow: 0 0 10px chartreuse;
 }
 
 h1 .separator {

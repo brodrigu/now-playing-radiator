@@ -17,38 +17,50 @@
 	<link rel="apple-touch-icon" href="images/apple-touch-icon.png"> 
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-    <script src="js/lastfm.js"></script>
+    <script src="js/fb.js"></script>
     <script src="js/now-playing.js"></script>
     
     <script>
     
     (function (document) {
-        
-        var get_username = function() {
-            // format: #username, or #!/user/username, prompt fallback
-            return document.location.hash.split('/')[2] || 
-                           document.location.hash.substring(1) || 
-                           prompt('Enter a Last.fm username?');
-        };
-    
-        $(document).ready(function() {        
-            // Canonicalise/Persist hash
-            document.location.hash = username = get_username();
-        
-            var api = new LastfmAPI('5f134f063744307ee6f126ac2c480fab');
+        var access_token = '',
+        appID = '236294986469745';
 
-            np = new NowPlaying(api, username);
-            np.autoUpdate();
-        });
-    
-        // Needs replacing with a cross browser jquery plugin
-        window.onhashchange = function(event) {
-            username = get_username();
-            if (username != np.user) {
-                np.user = username;
-                np.update();
-            }
-        };
+        if (window.location.hash.length > 0) {
+            var token = window.location.hash.substring(1).split('=')[1].split('&')[0];
+            var expires = new Date().getTime() + parseInt(window.location.hash.substring(1).split('&')[1].split('=')[1]);
+
+            localStorage.setItem('fbauth_token', token);
+            localStorage.setItem('fbauth_expires', expires);
+
+            window.location.href = '/';
+            //alert('found token: '+localStorage['fbauth_token'] + ' expires at ' + localStorage['fbauth_expires']);
+
+        } else if (!localStorage['fbauth_token'] || localStorage['fbauth_expires'] < new Date().getTime()) {
+            var path = 'https://www.facebook.com/dialog/oauth?';
+                var queryParams = ['client_id=' + appID,
+                    'redirect_uri=' + window.location,
+                    'response_type=token',
+                    'scope=user_actions.music,friends_actions.music'];
+                var query = queryParams.join('&');
+                var url = path + query;
+                window.location.href=url;
+        }
+
+        var accounts = [
+                  '3203345', //Brad
+                  '3329091', //sushant
+                  '701381311', //mike
+                  '1304234219', //yelena
+                  '7303200', //pieter
+                  '724828036', //david yoon
+                  '6301676' //JT
+            ];
+
+        var api = new FacebookAPI(localStorage['fbauth_token']);
+        var user = '3203345';
+        np = new NowPlaying(api, user);
+        np.autoUpdate();
         
     })(document);
     
@@ -60,11 +72,12 @@
     <div id="page" class="inactive">
         
         <header>
-            Now Playing
+            
         </header>
 
         <article>
             <h1>
+                <span id="user"></span> is listening to
                 <span id="artist">Artist</span>
                 <span class="separator">&mdash;</span> 
                 <span id="track">Track</span>
