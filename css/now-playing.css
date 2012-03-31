@@ -47,6 +47,10 @@ header a, footer a {
     box-shadow: 0 0 10px chartreuse;
 }
 
+#is {
+    font-size: 20px;
+}
+
 h1 .separator {
     display: none;
 }

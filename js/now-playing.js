@@ -2,8 +2,8 @@ NowPlaying = function(api, user, interval) {
     this.api = api;
     this.user = user;
     
-    /* AutoUpdate frequency - Last.fm API rate limits at 1/sec */
-    this.interval = interval || 10;
+    /* AutoUpdate frequency is seconds */
+    this.interval = interval || 20;
 };
 NowPlaying.prototype = {
     
@@ -34,7 +34,6 @@ NowPlaying.prototype = {
     
     handleResponse: function(response)
     {
-        console.log(response);
         if (response) {
             this.display({
                 // The API response can vary depending on the user, so be defensive
@@ -44,7 +43,8 @@ NowPlaying.prototype = {
             });
         }
         else {
-            this.display({artist: ' ', name: '', user: ''});
+            //don't stomp the screen if no data
+            //this.display({artist: ' ', name: '', user: ''});
         }
     }
 };

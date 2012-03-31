@@ -37,21 +37,23 @@ FacebookAPI .prototype = {
         var self = this;
         this.get(user + '/music.listens', {user: user}, function(response) {
 
-            if (!response.data.length) {
-                success(false);
-            }
+            try{ 
+                if (!response.data.length) {
+                    success(false);
+                }
 
-            var track = {
-                id:  response.data[0].data.song.id,
-                artist: '',
-                track: response.data[0].data.song.title,
-                album: response.data[0].data.album ? response.data[0].data.album.title : '',
-                user: response.data[0].from.name,
-                time: response.data[0].publish_time,
-                img: ''
-            }
+                var track = {
+                    id:  response.data[0].data.song.id,
+                    artist: '',
+                    track: response.data[0].data.song.title,
+                    album: response.data[0].data.album ? response.data[0].data.album.title : '',
+                    user: response.data[0].from.name,
+                    time: response.data[0].publish_time,
+                    img: ''
+                }
 
-            self.getTrackArtist(track, success, error);
+                self.getTrackArtist(track, success, error);
+            } catch (err) {};
 
         }, error);
     },

@@ -47,7 +47,7 @@
                 window.location.href=url;
         }
 
-        var accounts = [
+        var users = [
                   '3203345', //Brad
                   '3329091', //sushant
                   '701381311', //mike
@@ -58,9 +58,16 @@
             ];
 
         var api = new FacebookAPI(localStorage['fbauth_token']);
-        var user = '3203345';
-        np = new NowPlaying(api, user);
-        np.autoUpdate();
+        //var user = '3203345';
+
+        //create a watcher for each user
+        watchers = {};
+        $.each(users, function(i, user){
+            watchers[user] = new NowPlaying(api, user, users.length * 10);
+            setTimeout(function(){
+                watchers[user].autoUpdate();
+            }, i * 10000);
+        });
         
     })(document);
     
@@ -77,7 +84,7 @@
 
         <article>
             <h1>
-                <span id="user"></span> is listening to
+                <span id="user"></span> <span id="is">is listening to</span>
                 <span id="artist">Artist</span>
                 <span class="separator">&mdash;</span> 
                 <span id="track">Track</span>
@@ -85,7 +92,7 @@
         </article>
 
         <footer>
-            By <a href="http://twitter.com/dsingleton">@dsingleton</a> on <a href="https://github.com/dsingleton/now-playing-radiator">Github</a>
+            Originally by <a href="http://twitter.com/dsingleton">@dsingleton</a> but ported to facebook by <a href="http://twitter.com/brodrigu">@brodrigu</a> on <a href="https://github.com/brodrigu/now-playing-radiator">Github</a>
         </footer>
         
     </div>
